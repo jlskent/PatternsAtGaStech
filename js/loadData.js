@@ -5,7 +5,8 @@ var carTrackingData = [];
 var loyaltyCardTransactionData = [];
 var creaditCardTransactionData = [];
 
-
+var alibaJson = []
+var KronosJson = []
 
 
 d3.queue()
@@ -13,16 +14,23 @@ d3.queue()
   .defer(d3.csv, "data/assignment2/gps.csv")
   .defer(d3.csv, "data/assignment2/loyalty_data.csv")
   .defer(d3.csv, "data/assignment2/cc_data.csv")
-  .await(function(error, data1, data2, data3, data4) {
+  .defer(d3.json, "data/assignment2/Geospatial/Aliba.geojson")
+  .defer(d3.json, "data/assignment2/Geospatial/Kronos_Island.geojson")
+
+  .await(function(error, data1, data2, data3, data4, data5, data6) {
     if (error) throw error
     carAssignmentData = data1;
     carTrackingData = data2;
     loyaltyCardTransactionData = data3;
     creaditCardTransactionData = data4;
+    alibaJson = data5;
+    KronosJson = data6;
     console.log(carAssignmentData[0]);    // first row of car assignments
     console.log(carTrackingData[0]);    // first row of car assignments
     console.log(loyaltyCardTransactionData[0]);    // first row of car assignments
     console.log(creaditCardTransactionData[0]);  // first row of credit car
+    console.log(alibaJson);  // first row of credit car
+
   });
 
 
