@@ -9,6 +9,17 @@ var alibaJson = []
 var KronosJson = []
 
 
+
+
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+  width = 3000 - margin.left - margin.right,
+  height = 1500 - margin.top - margin.bottom;
+
+var svg = d3.select("body").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom);
+
+
 d3.queue()
   .defer(d3.csv, "data/assignment2/car-assignments.csv")
   .defer(d3.csv, "data/assignment2/gps.csv")
@@ -30,8 +41,30 @@ d3.queue()
     console.log(loyaltyCardTransactionData[0]);    // first row of car assignments
     console.log(creaditCardTransactionData[0]);  // first row of credit car
     console.log(alibaJson);  // first row of credit car
+    //
+    var projection = d3.geoMercator().fitSize([width, height], alibaJson);
+    // var projection = d3.geoEquirectangular();
+
+    // var projection = d3.geoAlbersUsa();
+    var path = d3.geoPath(projection);
+
+    svg.selectAll("path")
+      .data(alibaJson.features)
+      .enter()
+      .append("path")
+      .attr("d", path)
+      .style("stroke", "black")
+      .style("stroke-width", "5")
+      .style("fill", (d) => {
+        return "rgb(213,222,217)";
+      })
+
+    ;
 
   });
+
+
+
 
 
 // use this only for v5
