@@ -14,7 +14,7 @@ const dataPromise = new Promise((resolve, reject) => {
     .await(function(error, data1, data2, data3, data4, data5, data6) {
       if (error) reject(error);
       const carAssignmentData = data1;
-      const carTrackingData = filterNaN(data2.slice(0, 8000));
+      const carTrackingData = filterNaN(data2);
       const loyaltyCardTransactionData = data3;
       const creaditCardTransactionData = data4;
       const alibaJson = data5;
