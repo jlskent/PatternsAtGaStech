@@ -8,9 +8,25 @@
     </head>
     <body>
         <p>Patterns at GAStech</p>
+
+
+        <!--<script type="module" src="./js/processData.js"></script>-->
+
+        <div id="checkBox"></div>
+        <div id="dropDown"></div>
+
+
+        <div id="btns">
+            <input id="btn1" type="button" value="drawBaseMap" onclick="drawBaseMap()" />
+            <input id="btn2" type="button" value="drawGpsMap" onclick="drawGpsData()" />
+            <!--<input id="btn3" type="button" value="drawGpsMap" onclick="filter()" />-->
+
+        </div>
+
         <script src="js/d3/d3.min.js"></script>
-        <!--<script src="js/main.js"></script>-->
-        <script src="js/loadData.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+
+        <script src="js/loadData.js" ></script>
 
     </body>
 </html>
