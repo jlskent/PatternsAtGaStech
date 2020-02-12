@@ -1,5 +1,11 @@
 # PatternsAtGaStech
 
+### Tab
+
+There are two tabs. One for car tracking visualization and one for transaction visualization. If you select car tracking tab, all transaction visualization will be hidden, and vice versa. 
+
+Add `tracking-item` or `transaction-item` as a class to become a child of that tab.
+
 ### Usage
 
  `index.html` includes 4 js files directly.
