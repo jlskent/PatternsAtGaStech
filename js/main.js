@@ -1,5 +1,6 @@
 import dataAgent from './loadData.js';
 import {show, hide} from './util.js';
+import {drawTimeline} from './timeline.js'
 
 const {getAlibaData, getCreditCardTransactions} = dataAgent;
 
@@ -14,8 +15,9 @@ var margin = {top: 10, right: 30, bottom: 30, left: 60},
 
 var svg = d3.select("body").append("svg")
   // .attr("id", )
+  .attr("preserveAspectRatio", "none")
   .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom);
+  .attr("height", height + margin.top + margin.bottom + 200);
 
 
 var storeLocationSelector = svg.append("g");
@@ -54,6 +56,8 @@ transactionTab.addEventListener('click', function (e) {
   carTrackingTab.classList.remove("tab-selected");
 
 });
+
+drawTimeline();
 
 
 
@@ -200,8 +204,11 @@ getCreditCardTransactions().then( data =>
 function loadImage(){
   var myimage = svg.append('image')
     .attr('xlink:href', 'data/assignment2/MC2-tourist.jpg')
-    .attr('width', 1000)
-    .attr('height', 800)
+    .attr('width', width)
+    .attr('height', 653.63)
+    .attr('x', 0)
+    .attr('y', 53.37)
+    .attr("preserveAspectRatio", "none")
 }
 
 
@@ -212,4 +219,4 @@ function loadImage(){
 
 
 
-export {svg, projection};
+export {svg, projection, width, height};
