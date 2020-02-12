@@ -18,6 +18,9 @@ d3.select('#btn2')
 var carTrackingSelect = svg.append("g");
 getAllCarAssignments().then(data => createDropDown(data));
 
+
+
+
 function drawTrackingData(data) {
   d3.select("#gpsGraph").remove();
 
@@ -29,7 +32,13 @@ function drawTrackingData(data) {
     .enter()
     .append("circle")
     .attr("cx", (d) => {
+      // console.log("traking");
+      // console.log([d.long, d.lat]);
+
+      // console.log(projection([d.long, d.lat]));
+      // console.log(projection([36.076225, 24.87468932]));
       var coord = projection([d.long, d.lat]);
+      // console.log(coord);
       return coord[0];
     })
     .attr("cy", (d) =>{
@@ -42,6 +51,8 @@ function drawTrackingData(data) {
   // .style("fill", "#69b3a2")
 };
 
+
+
 let createDropDown = (carAssignments) => {
   // console.log(data);
   var dropDown = d3.select("#dropDown")
@@ -50,10 +61,10 @@ let createDropDown = (carAssignments) => {
 
   dropDown.on("change", function(d) {
     var value = d3.select(this).property("value");
-    console.log("car id "+value);
+    // console.log("car id "+value);
     getCarTrackingDataById(value).then(carTrackingData => {
-    	drawTrackingData(carTrackingData);
-    });    
+      drawTrackingData(carTrackingData);
+    });
   });
 
   dropDown.selectAll("option")
@@ -65,4 +76,3 @@ let createDropDown = (carAssignments) => {
     })
     .text(function (d) { return d.LastName + " " + d.FirstName; });
 };
-

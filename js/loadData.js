@@ -51,10 +51,24 @@ function getAlibaData() {
   return dataPromise.then(data => data.alibaJson).catch(e => "No data fetched.");
 }
 
+
+function getLoyaltyCardTransactions() {
+
+  return dataPromise.then(data => data.loyaltyCardTransactionData).catch(e => "No data fetched.");
+}
+
+
+function getCreditCardTransactions() {
+  return dataPromise.then(data => data.creaditCardTransactionData).catch(e => "No data fetched.");
+}
+
+
 const dataAgent = {
   getAllCarAssignments,
   getCarTrackingDataById,
   getAlibaData,
+  getLoyaltyCardTransactions,
+  getCreditCardTransactions
 };
 
 export default dataAgent;
