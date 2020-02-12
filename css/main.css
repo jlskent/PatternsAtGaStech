@@ -1,6 +1,11 @@
 body {
     font: 10px sans-serif;
 }
+
+.hidden {
+	display: none;
+}
+
 select {
     display: block;
 }
@@ -14,4 +19,35 @@ select {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
+}
+
+.tab-list {
+	display: flex;
+	width: 1000px;
+	justify-content: space-around;
+}
+
+.tab {
+	cursor: pointer;
+	width: 150px;
+	height: 50px;
+	background-color: #dddddd;
+	transition: all 1s;
+	color: #232830;
+	line-height: 50px;
+	text-align: center;
+	font-size: 20px;
+	border-radius: 5px;
+}
+
+.tab:not(.tab-selected):hover {
+	background-color: #232830;
+	color: white;
+	font-weight: bold;
+}
+
+.tab-selected {
+	background-color: #232830;
+	color: white;
+	font-weight: bold;
 }

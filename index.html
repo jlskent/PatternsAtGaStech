@@ -4,23 +4,31 @@
         <meta charset="UTF-8">
         <title>Patterns at GAStech</title>
         <!--<script type="text/javascript src="js/main.js"></script>-->
-
+        <link rel="stylesheet" href="./css/main.css">
     </head>
     <body>
         <p>Patterns at GAStech</p>
-
+        
+        <div class="tab-list">
+            <div class="tab tracking-tab tab-selected">Car Tracking</div>
+            <div class="tab transaction-tab">Transactions</div> 
+        </div>
 
         <!--<script type="module" src="./js/processData.js"></script>-->
 
-        <div id="checkBox"></div>
-        <div id="dropDown"></div>
+        <div id="checkBox" class="tracking-item"></div>
+        <div id="dropDown" class="tracking-item"></div>
 
 
-        <div id="btns">
+        <div id="btns" class="tracking-item">
             <input id="btn1" type="button" value="drawBaseMap" onclick="drawBaseMap()" />
             <input id="btn2" type="button" value="drawGpsMap" onclick="drawGpsData()" />
             <!--<input id="btn3" type="button" value="drawGpsMap" onclick="filter()" />-->
 
+        </div>
+
+        <div class="transaction-item hidden">
+            Here is transaction visualization
         </div>
 
         <script src="js/d3/d3.min.js"></script>

@@ -1,4 +1,5 @@
 import dataAgent from './loadData.js';
+import {show, hide} from './util.js';
 
 const {getAlibaData, getCreditCardTransactions} = dataAgent;
 
@@ -23,6 +24,34 @@ getAlibaData().then(alibaJson => {
   projection.fitSize([width, height], alibaJson);
   drawBaseMap(alibaJson.features);
   // loadImage();
+
+});
+
+const carTrackingTab = document.querySelector(".tracking-tab");
+const transactionTab = document.querySelector(".transaction-tab");
+
+carTrackingTab.addEventListener('click', function (e) {
+  if(this.classList.contains('tab-selected')) return;
+
+  // show and hide corresponding items
+  hide('.transaction-item');
+  show('.tracking-item');
+
+  // modify tab style
+  this.classList.add("tab-selected");
+  transactionTab.classList.remove("tab-selected");
+});
+
+transactionTab.addEventListener('click', function (e) {
+  if(this.classList.contains('tab-selected')) return;
+
+  // show and hide corresponding items
+  hide('.tracking-item');
+  show('.transaction-item');
+
+  // modify tab style
+  this.classList.add("tab-selected");
+  carTrackingTab.classList.remove("tab-selected");
 
 });
 
@@ -71,6 +100,7 @@ let drawStoreLocations = (data) => {
   // d3.select("#transactions").remove();
   storeLocationSelector
     .attr("id", "locations")
+    .attr("class", "transaction-item hidden")
     .selectAll("locationPoints")
     .data(data)
     .enter()

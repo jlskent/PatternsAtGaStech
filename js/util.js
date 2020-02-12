@@ -6,3 +6,17 @@ export function filterNaN(rows) {
   });
   return filteredRows;
 }
+
+/*
+ * selector(string): It's a css selector. '.' and '#' should be included.
+ */
+export function hide(selector) {
+	document.querySelectorAll(selector).forEach(node => {
+		node.classList.add("hidden");
+	});
+}
+export function show(selector) {
+	document.querySelectorAll(selector).forEach(node => {
+		node.classList.remove("hidden");
+	});
+}
