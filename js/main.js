@@ -22,8 +22,8 @@ var storeLocationSelector = svg.append("g");
 
 getAlibaData().then(alibaJson => {
   projection.fitSize([width, height], alibaJson);
+  loadImage();
   drawBaseMap(alibaJson.features);
-  // loadImage();
 
 });
 
@@ -187,7 +187,7 @@ getCreditCardTransactions().then( data =>
       };
     });
 
-    console.log(storeLocationList);
+    // console.log(storeLocationList);
     drawStoreLocations(storeLocationList);
 
   }
@@ -199,7 +199,7 @@ getCreditCardTransactions().then( data =>
 
 function loadImage(){
   var myimage = svg.append('image')
-    .attr('src', 'data/assignment2/MC2-tourist.jpg')
+    .attr('xlink:href', 'data/assignment2/MC2-tourist.jpg')
     .attr('width', 1000)
     .attr('height', 800)
 }

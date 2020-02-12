@@ -15,7 +15,6 @@ d3.select('#btn2')
 
   });
 
-var carTrackingSelect = svg.append("g");
 getAllCarAssignments().then(data => createDropDown(data));
 
 
@@ -25,7 +24,7 @@ function drawTrackingData(data) {
   d3.select("#gpsGraph").remove();
 
   console.log("drawing gps data");
-  carTrackingSelect.append('g')
+  svg.append('g')
     .attr("id", "gpsGraph")
     .selectAll("dot")
     .data(data)
@@ -46,6 +45,7 @@ function drawTrackingData(data) {
       return coord[1];
     })
     .attr("r", 2)
+    .attr("z-index", "9")
     // .style("stroke", "red")
     .style("fill", (d) => { return "red"})
   // .style("fill", "#69b3a2")
