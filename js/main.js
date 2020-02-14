@@ -56,43 +56,57 @@ transactionTab.addEventListener('click', function (e) {
 
 });
 
-const timeline = drawTimelineAxis();
+const {timeline, xScaleWeek1, xScaleWeek2, yScale} = drawTimelineAxis();
 
 function drawTimelineAxis() {
-  const timelinePadding = 20;
+  const timelinePadding = 40;
+  const timelinePaddingTop = 20;
   const timelineWidth = 910;
   const timelineHeight = 200;
 
-  const minDate = new Date('01/06/2014 06:28:01');
-  const maxDate = new Date('01/19/2014 20:56:55');
-  const xScale = d3.scaleTime()
-                    .domain([minDate, maxDate])
-                    .range([timelinePadding, timelineWidth - 2 * timelinePadding]);
+  const minDateWeek1 = new Date('01/06/2014');
+  const maxDateWeek1 = new Date('01/13/2014');
+  const minDateWeek2 = new Date('01/13/2014');
+  const maxDateWeek2 = new Date('01/20/2014');
+
+  // define scales
+  const xScaleWeek1 = d3.scaleTime()
+                    .domain([minDateWeek1, maxDateWeek1])
+                    .range([0, timelineWidth - 2 * timelinePadding]);
+
+  const xScaleWeek2 = d3.scaleTime()
+                      .domain([minDateWeek2, maxDateWeek2])
+                      .range([0, timelineWidth - 2 * timelinePadding]);
 
   const yScale = d3.scaleLinear()
                     .domain([0, 1])
-                    .range([timelineHeight - 2 * timelinePadding, timelinePadding]);
+                    .range([timelineHeight - 2 * timelinePaddingTop, timelinePadding]);
 
+  // draw timeline group 
   const timeline = svg.append('g')
-            .style('transform', `translateY(${height}px)`)
+            .style('transform', `translate(${timelinePadding}px, ${height}px)`)
             .attr('id', 'timelineGroup');
-
+  
+  // draw x axis
+  const xAxis = d3.axisBottom(xScaleWeek1).tickFormat(d => {
+    if(d.getHours() === 12) return '12 PM';
+    else if(d.getDate() === 13) return '';
+    else return new Intl.DateTimeFormat('en-US', { weekday: 'long'}).format(d);
+  });
   timeline.append('g')
-          .style('transform', `translate(${timelinePadding}px, ${timelineHeight - 2 * timelinePadding}px)`)
-          .call(d3.axisBottom(xScale));
+          .style('transform', `translateY(${timelineHeight - 2 * timelinePaddingTop}px)`)
+          .call(xAxis);
                   
-
+  // draw y axis
   const yAxis = d3.axisLeft(yScale).ticks(4).tickFormat(function (d) {
                                       if(d === 0.4) return "week1";
                                       if(d === 0.8) return "week2";
-                                      // if(d === 0.25)
                                       return "";
                                     });
   timeline.append('g')
-          .style('transform', `translate(${timelinePadding * 2}px, 0)`)
           .call(yAxis);
 
-  return timeline;
+  return {timeline, xScaleWeek1, xScaleWeek2, yScale};
 }
 
 function drawBaseMap(alibaData){
@@ -252,4 +266,4 @@ function loadImage(){
 
 
 
-export {svg, projection, timeline};
+export {svg, projection, timeline, xScaleWeek1, xScaleWeek2, yScale};
