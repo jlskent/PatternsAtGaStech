@@ -43,7 +43,7 @@ function drawTrackingData(data) {
   let count = 0;
 
   console.log("drawing gps data");
-  svg.append('g')
+  const allData = svg.append('g')
     .attr("id", "gpsGraph")
     .selectAll("dot")
     .data(data)
@@ -87,7 +87,7 @@ function drawTrackingData(data) {
     })
     .attr('fill-opacity', '0.25');
 
-    drawTimeline(week1data, week2data);
+    drawTimeline(week1data, week2data, allData);
 };
 
 
@@ -116,7 +116,7 @@ let createDropDown = (carAssignments) => {
     .text(function (d) { return d.LastName + " " + d.FirstName; });
 };
 
-function drawTimeline(week1, week2) {
+function drawTimeline(week1, week2, allData) {
 
 
   timeline.append("g")
@@ -141,25 +141,32 @@ function drawTimeline(week1, week2) {
           .style('fill', 'blue')
           .attr('cx', d => xScaleWeek2(d.Timestamp))
           .attr('cy', yScale(0.8));
-const timelinePadding = 40;
-const timelinePaddingTop = 20;
-const timelineWidth = 910;
-const timelineHeight = 200;
+  const timelinePadding = 40;
+  const timelinePaddingTop = 20;
+  const timelineWidth = 910;
+  const timelineHeight = 200;
 
-const brush = d3.brushX()
-                .extent([[timelinePadding, timelinePaddingTop], [timelineWidth - 2 * timelinePadding, timelineHeight - 2 * timelinePaddingTop]])
-                .on("end", brushended);
+  const brush = d3.brushX()
+                  .extent([[0, timelinePaddingTop * 2], [timelineWidth - 2 * timelinePadding, timelineHeight - 2 * timelinePaddingTop]])
+                  .on("end", brushended);
 
-timeline.append("g")
-        .attr('class', 'brush')
-        .attr('z-index', '999')
-        .call(brush);
+  timeline.append("g")
+          .attr('class', 'brush')
+          .attr('z-index', '999')
+          .call(brush);
+
+  function brushended() {
+    const selection = d3.event.selection;
+    if (!d3.event.sourceEvent || !selection) return;
+    const [x1, x2] = d3.event.selection;
+
+    allData.classed("hidden", function (d) {
+      const week1X = xScaleWeek1(d.Timestamp);
+      const week2X = xScaleWeek2(d.Timestamp);
+      return !((week1X >= x1 && week1X <= x2) || (week2X >= x1 && week2X <= x2));
+    });
+  }
 }
 
-function brushended() {
-  const selection = d3.event.selection;
-  if (!d3.event.sourceEvent || !selection) return;
-  console.log(123);
 
-  
-}
+
