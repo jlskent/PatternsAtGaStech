@@ -1,6 +1,5 @@
 import dataAgent from './loadData.js';
 import {show, hide} from './util.js';
-import {drawTimeline} from './timeline.js'
 
 const {getAlibaData, getCreditCardTransactions} = dataAgent;
 
@@ -25,7 +24,7 @@ var storeLocationSelector = svg.append("g");
 getAlibaData().then(alibaJson => {
   projection.fitSize([width, height], alibaJson);
   loadImage();
-  drawBaseMap(alibaJson.features);
+  //drawBaseMap(alibaJson.features);
 
 });
 
@@ -57,9 +56,44 @@ transactionTab.addEventListener('click', function (e) {
 
 });
 
-drawTimeline();
+const timeline = drawTimelineAxis();
 
+function drawTimelineAxis() {
+  const timelinePadding = 20;
+  const timelineWidth = 910;
+  const timelineHeight = 200;
 
+  const minDate = new Date('01/06/2014 06:28:01');
+  const maxDate = new Date('01/19/2014 20:56:55');
+  const xScale = d3.scaleTime()
+                    .domain([minDate, maxDate])
+                    .range([timelinePadding, timelineWidth - 2 * timelinePadding]);
+
+  const yScale = d3.scaleLinear()
+                    .domain([0, 1])
+                    .range([timelineHeight - 2 * timelinePadding, timelinePadding]);
+
+  const timeline = svg.append('g')
+            .style('transform', `translateY(${height}px)`)
+            .attr('id', 'timelineGroup');
+
+  timeline.append('g')
+          .style('transform', `translate(${timelinePadding}px, ${timelineHeight - 2 * timelinePadding}px)`)
+          .call(d3.axisBottom(xScale));
+                  
+
+  const yAxis = d3.axisLeft(yScale).ticks(4).tickFormat(function (d) {
+                                      if(d === 0.4) return "week1";
+                                      if(d === 0.8) return "week2";
+                                      // if(d === 0.25)
+                                      return "";
+                                    });
+  timeline.append('g')
+          .style('transform', `translate(${timelinePadding * 2}px, 0)`)
+          .call(yAxis);
+
+  return timeline;
+}
 
 function drawBaseMap(alibaData){
   // console.log(" hihih ");
@@ -77,8 +111,7 @@ function drawBaseMap(alibaData){
     // util to get coordinates to pin stores
     .on('mousemove', function() {
       console.log(projection.invert(d3.mouse(this)));
-    })
-    ;
+    });
   // .on("mouseover", function(d) {
   // console.log(d);
   // tip.show()
@@ -219,4 +252,4 @@ function loadImage(){
 
 
 
-export {svg, projection, width, height};
+export {svg, projection, timeline};

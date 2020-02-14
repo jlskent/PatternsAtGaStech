@@ -1,5 +1,5 @@
 import dataAgent from './loadData.js';
-import {svg, projection} from './main.js';
+import {svg, projection, timeline} from './main.js';
 
 const {getAllCarAssignments, getCarTrackingDataById} = dataAgent;
 
@@ -23,6 +23,10 @@ getAllCarAssignments().then(data => createDropDown(data));
 function drawTrackingData(data) {
   d3.select("#gpsGraph").remove();
 
+
+  const week1data = [];
+  const week2data = [];
+
   console.log("drawing gps data");
   svg.append('g')
     .attr("id", "gpsGraph")
@@ -36,7 +40,10 @@ function drawTrackingData(data) {
 
       // console.log(projection([d.long, d.lat]));
       // console.log(projection([36.076225, 24.87468932]));
+      
+
       var coord = projection([d.long, d.lat]);
+      // if(new Date(d.Timestamp).ge)
       // console.log(coord);
       return coord[0];
     })
@@ -46,9 +53,19 @@ function drawTrackingData(data) {
     })
     .attr("r", 2)
     .attr("z-index", "9")
-    // .style("stroke", "red")
-    .style("fill", (d) => { return "red"})
-  // .style("fill", "#69b3a2")
+    .style("fill", (d) => { 
+      const date = d.Timestamp.getDate();
+      if(date >= 6 && date <= 12) {
+        week1data.push(d);
+        return 'red';
+      } else {
+        week2data.push(d);
+        return 'blue';
+      }
+    })
+    .attr('fill-opacity', '0.25');
+
+    drawTimeline(week1data, week2data);
 };
 
 
@@ -76,3 +93,8 @@ let createDropDown = (carAssignments) => {
     })
     .text(function (d) { return d.LastName + " " + d.FirstName; });
 };
+
+function drawTimeline(week1, week2) {
+  console.log(week1, week2);
+
+}

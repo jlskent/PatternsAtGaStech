@@ -7,6 +7,11 @@ export function filterNaN(rows) {
   return filteredRows;
 }
 
+export function processDate(rows) {
+	rows.forEach(row => row.Timestamp = new Date(row.Timestamp));
+	return rows;
+}
+
 /*
  * selector(string): It's a css selector. '.' and '#' should be included.
  */
