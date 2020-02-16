@@ -59,8 +59,24 @@ function getLoyaltyCardTransactions() {
 
 
 function getCreditCardTransactions() {
+
   return dataPromise.then(data => data.creaditCardTransactionData).catch(e => "No data fetched.");
 }
+
+
+function getListOfPlaces() {
+
+  return dataPromise.then(data => {
+    var listOfPlaces = [];
+    data.loyaltyCardTransactionData.forEach(row => listOfPlaces.push(row.location));
+    data.creaditCardTransactionData.forEach(row => listOfPlaces.push(row.location));
+    listOfPlaces = listOfPlaces.filter((item, i, array) => array.indexOf(item) == i);
+    return listOfPlaces;
+  }).catch(
+    e => console.log(" failed to load data")
+  );
+}
+
 
 
 const dataAgent = {
@@ -68,7 +84,8 @@ const dataAgent = {
   getCarTrackingDataById,
   getAlibaData,
   getLoyaltyCardTransactions,
-  getCreditCardTransactions
+  getCreditCardTransactions,
+  getListOfPlaces
 };
 
 export default dataAgent;

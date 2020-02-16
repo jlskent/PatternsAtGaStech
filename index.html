@@ -5,6 +5,8 @@
         <title>Patterns at GAStech</title>
         <!--<script type="text/javascript src="js/main.js"></script>-->
         <link rel="stylesheet" href="./css/main.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
     </head>
     <body>
         <p>Patterns at GAStech</p>
@@ -29,12 +31,19 @@
 
         <div class="transaction-item hidden">
             Here is transaction visualization
+            <input id="showCreditCardBtn" type="button" value="show credit card" onclick="" />
+            <input id="showLoyaltyCardBtn" type="button" value="show loyalty card" onclick="" />
+            <input id="sort" type="button" value="sort Records" onclick="" />
+            <div class="row">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-4"></div>
+            </div>
         </div>
 
         <script src="js/d3/d3.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
         <script type="module" src="./js/main.js"></script>
-        <script type="module" src="js/transaction.js"></script>
+        <script type="module" src="./js/transaction.js"></script>
         <script type="module" src="./js/tracking.js"></script>
 
         <!-- <script src="js/loadData.js" ></script> -->

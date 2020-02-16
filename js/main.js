@@ -124,7 +124,8 @@ function drawBaseMap(alibaData){
     })
     // util to get coordinates to pin stores
     .on('mousemove', function() {
-      console.log(projection.invert(d3.mouse(this)));
+      // get current long lat
+      // console.log(projection.invert(d3.mouse(this)));
     });
   // .on("mouseover", function(d) {
   // console.log(d);
@@ -157,11 +158,11 @@ let drawStoreLocations = (data) => {
     .enter()
     .append("circle")
     .attr("cx", (d) => {
-      console.log(d.long);
-      console.log(d.lat);
+      // console.log(d.long);
+      // console.log(d.lat);
       // console.log(projection);
       var coord = projection([d.long, d.lat]);
-      console.log(coord);
+      // console.log(coord);
       return coord[0];
 
     })
@@ -183,7 +184,7 @@ let drawStoreLocations = (data) => {
 // pin places on map
 getCreditCardTransactions().then( data =>
   {
-    console.log("transactions");
+    // console.log("transactions");
     var listOfPlaces = [];
     data.forEach(row => listOfPlaces.push(row.location));
     listOfPlaces = listOfPlaces.filter((item, i, array) => array.indexOf(item) == i);
@@ -229,7 +230,7 @@ getCreditCardTransactions().then( data =>
     listOfCoord.push({ long: 24.86286569, lat: 36.05024141 });
     listOfCoord.push({ long: 24.86286569, lat: 36.05024141 });
 
-    console.log(listOfCoord);
+    // console.log(listOfCoord);
     var storeLocationList = listOfPlaces.map(function (placeName, idx) {
       // return [placeName, listOfCoord[idx].long, listOfCoord[idx].lat];
       return {placeName: placeName,
