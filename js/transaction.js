@@ -6,11 +6,11 @@ const { getCreditCardTransactions, getLoyaltyCardTransactions, getListOfPlaces }
 
 //selector
 var transactionSelector = d3.select(".transaction-item");
-var placeSelector = d3.select(".col-sm-8").append("div").attr("id", "places");
+var placeSelector = d3.select("#name").append("div").attr("id", "places");
 //cc
-var recordsSelector = d3.select(".col-sm-4").append("div").attr("id", "records");
+var recordsSelector = d3.select("#cc").append("div").attr("id", "records");
 //lc
-var recordsSelector2 = d3.select(".col-sm-4").append("div").attr("id", "records2");
+var recordsSelector2 = d3.select("#lc").append("div").attr("id", "records2");
 
 
 //states
@@ -44,6 +44,9 @@ d3.select('#showCreditCardBtn')
     console.log("show showCreditCardBtn");
     showCreditCardRecords = true;
     showLoyaltyCardRecords = false;
+    const opacity = showCreditCardRecords? 1:0;
+    recordsSelector.style("opacity", opacity);
+
   });
 
 
@@ -52,6 +55,8 @@ d3.select('#showLoyaltyCardBtn')
     console.log("show showLoyaltyCardBtn");
     showCreditCardRecords = false;
     showLoyaltyCardRecords = true;
+    const opacity = showLoyaltyCardRecords? 1:0;
+    recordsSelector.style("opacity", opacity);
   });
 
 
@@ -132,8 +137,8 @@ function drawList(data) {
     .attr("class", "list-group-item")
     .on('click', (nameOfPlace, i) => {
       currentNameOfPlace = nameOfPlace;
-      if(showCreditCardRecords) showRecords(nameOfPlace, name_ccMap.get(nameOfPlace), recordsSelector);
-      if(showLoyaltyCardRecords) showRecords(nameOfPlace, name_lcMap.get(nameOfPlace) ,recordsSelector2);
+      showRecords(nameOfPlace, name_ccMap.get(nameOfPlace), recordsSelector);
+      showRecords(nameOfPlace, name_lcMap.get(nameOfPlace) ,recordsSelector2);
       showOnMap(nameOfPlace); // not yet implemented
       console.log(nameOfPlace);
     })

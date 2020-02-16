@@ -53,30 +53,34 @@ select {
 }
 
 
+li:hover{
+	color: white !important;
+	text-emphasis: white;
+	background-color: darkslateblue; !important;
 
+}
 
 
 
 /*transaction*/
 
-ul {
-	position: absolute;
-	top: 20px;
-	bottom: 20px;
-	left: 20px;
-	right: 20px;
-	overflow: scroll;
-	margin: 0;
-	padding: 0;
+/*ul {*/
+	/*position: absolute;*/
+	/*top: 20px;*/
+	/*bottom: 20px;*/
+	/*left: 20px;*/
+	/*right: 20px;*/
+	/*overflow: scroll;*/
+	/*margin: 0;*/
+	/*padding: 0;*/
 
-	border: 2px solid #ccc;
+	/*border: 2px solid #ccc;*/
 
-	font-size: 16px;
-	font-family: Arial, sans-serif;
-	-webkit-overflow-scrolling: touch;
+	/*font-size: 16px;*/
+	/*font-family: Arial, sans-serif;*/
+	/*-webkit-overflow-scrolling: touch;*/
 
-/*// Again, this is where the magic happens*/
-}
+/*}*/
 
 /*li {*/
 	/*padding: 10px 20px;*/
