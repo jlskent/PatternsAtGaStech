@@ -5,7 +5,8 @@ import { svg, projection } from './main.js';
 const { getCreditCardTransactions, getLoyaltyCardTransactions, getListOfPlaces, getListOfPeople } = dataAgent;
 
 //selector
-var transactionSelector = d3.select(".transaction-item").append("div");
+var parent = d3.select(".transaction-item");
+var transactionSelector = parent.append("div");
 var placeSelector = d3.select("#name").append("div").attr("id", "places");
 //cc
 var recordsSelector = d3.select("#cc").append("div").attr("id", "records");
@@ -77,7 +78,7 @@ d3.select('#sort')
 
 d3.select('#showCreditCardBtn')
   .on('click', function() {
-    console.log("show showCreditCardBtn");
+    //console.log("show showCreditCardBtn");
     showCreditCardRecords = true;
     showLoyaltyCardRecords = false;
     const opacity = showCreditCardRecords? 1:0;
@@ -88,7 +89,7 @@ d3.select('#showCreditCardBtn')
 
 d3.select('#showLoyaltyCardBtn')
   .on('click', function() {
-    console.log("show showLoyaltyCardBtn");
+    //console.log("show showLoyaltyCardBtn");
     showCreditCardRecords = false;
     showLoyaltyCardRecords = true;
     const opacity = showLoyaltyCardRecords? 1:0;
@@ -240,7 +241,6 @@ Promise.all([getCreditCardTransactions(), getLoyaltyCardTransactions(), getListO
     //console.log(maps[0]);
     name_ccMap = maps[0];
     name_lcMap = maps[1];
-    //drawList(places); //draws table
 
     const personTransactionSum = new Map();
     // const maxPrice = Math.max(d3.max(cc, function(d) { return d.price; }), d3.max(lc, function(d) { return d.price; })); // todo
@@ -248,6 +248,7 @@ Promise.all([getCreditCardTransactions(), getLoyaltyCardTransactions(), getListO
 
     createDropDown(people);
     createDropDownTime();
+    drawList(places); //draws table
 
 
     people.forEach(person => {
@@ -264,6 +265,7 @@ Promise.all([getCreditCardTransactions(), getLoyaltyCardTransactions(), getListO
 
     //default behavior
     drawStatGraph(personTransactionSum, places, "Cornelia Lais", "week1");
+
   });
 
 
@@ -359,7 +361,7 @@ function drawStatGraph(personTransactionSum, places, person, week){
     .append("circle")
     .attr("class", "creditDots")
     .attr("cx", function(d) {
-      console.log(d[1][week]);
+      // console.log(d[1][week]);
       return x(d[0]);
     })
     .attr("cy", function(d) { return y(d[1][week][0]); })
@@ -440,12 +442,12 @@ function createLocation_ccTransactionMap(cc) {
 
 
 function drawList(data) {
-  //console.log(data);
+  console.log(data);
   d3.select("#transactions").remove();
-  placeSelector.append("h4").text("Places of Transaction");
+  parent.append("h4").text("Places of Transaction");
 
   var ul =
-  placeSelector
+    parent
     .append("ul")
     .attr("id", "listOfPlaces")
     .attr("class", "list-group")
@@ -462,7 +464,7 @@ function drawList(data) {
       showRecords(nameOfPlace, name_ccMap.get(nameOfPlace), recordsSelector);
       showRecords(nameOfPlace, name_lcMap.get(nameOfPlace) ,recordsSelector2);
       showOnMap(nameOfPlace); // not yet implemented
-      console.log(nameOfPlace);
+      //console.log(nameOfPlace);
     })
 
   ;
