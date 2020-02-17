@@ -2,10 +2,10 @@
 // imports
 import dataAgent from './loadData.js';
 import { svg, projection } from './main.js';
-const { getCreditCardTransactions, getLoyaltyCardTransactions, getListOfPlaces } = dataAgent;
+const { getCreditCardTransactions, getLoyaltyCardTransactions, getListOfPlaces, getListOfPeople } = dataAgent;
 
 //selector
-var transactionSelector = d3.select(".transaction-item");
+var transactionSelector = d3.select(".transaction-item").append("div");
 var placeSelector = d3.select("#name").append("div").attr("id", "places");
 //cc
 var recordsSelector = d3.select("#cc").append("div").attr("id", "records");
@@ -13,18 +13,55 @@ var recordsSelector = d3.select("#cc").append("div").attr("id", "records");
 var recordsSelector2 = d3.select("#lc").append("div").attr("id", "records2");
 
 
-//states
+
+
+
+
+
+
+
+// canvas for scatter plot
+var margin = {top: 20, right: 20, bottom: 100, left: 40},
+  width = 960 - margin.left - margin.right,
+  height = 500 - margin.top - margin.bottom;
+
+
+var chart = transactionSelector.append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+const COLOR = {
+  BLUE: "blue",
+  RED: "red",
+  GREEN: "green",
+};
+
+
+
+
+// end of canvas
+
+
+
+
+//states to
 var currentNameOfPlace = "";
 var name_ccMap = new Map();
 var name_lcMap = new Map();
 var showCreditCardRecords = true;
 var showLoyaltyCardRecords = false;
 
+var currentPerson = "";
+var currentWeek = "";
+var allTransactionsOfEachPerson = new Map();
+var allPlaces = [];
 
 
 
-
-// buttons
+// buttons not using currently
 
 // looks like it is already sorted TAT
 d3.select('#sort')
@@ -34,7 +71,6 @@ d3.select('#sort')
     records = Object.keys(records).sort(function(a,b){return records[a].timestamp-records[b].timestamp});
     showRecords(currentNameOfPlace, records);
   });
-
 
 
 
@@ -62,8 +98,136 @@ d3.select('#showLoyaltyCardBtn')
 
 
 
+// looks like it is already sorted TAT
+d3.select('#sort')
+  .on('click', function() {
+    if(currentNameOfPlace == "") return;
+    var records = name_ccMap.get(currentNameOfPlace);
+    records = Object.keys(records).sort(function(a,b){return records[a].timestamp-records[b].timestamp});
+    showRecords(currentNameOfPlace, records);
+  });
 
-Promise.all([getCreditCardTransactions(), getLoyaltyCardTransactions(), getListOfPlaces()]).then( ([cc,lc,places]) => {
+
+
+
+
+
+
+
+// TODO get weekly sum
+// given state map of <location, [records]> loaded, query for specific person and compute sum
+function getSumOfPerson (firstName, lastName, locationList){
+  // console.log(name_ccMap)
+
+  const res = new Map();
+  locationList.forEach(location => {
+
+    //console.log(location);
+    const creditRecordsPerLocation = name_ccMap.has(location)? name_ccMap.get(location) : [];
+    const loyaltyRecordsPerLocation = name_lcMap.has(location)? name_lcMap.get(location): [];
+
+    //console.log(loyaltyRecordsPerLocation);
+    const creditRecordsPerLocationPerson = creditRecordsPerLocation.filter(row => {return row.FirstName === firstName && row.LastName === lastName});
+    const loyaltyRecordsPerLocationPerson = loyaltyRecordsPerLocation.filter(row => {return row.FirstName === firstName && row.LastName === lastName});
+
+    //WK1
+    const creditRecordsPerLocationPersonWk1 = creditRecordsPerLocationPerson.filter(row => {
+      return row.timestamp >= "1/06/2014"  && row.timestamp <= "1/12/2014 ";
+    });
+
+    const loyaltyRecordsPerLocationPersonWk1 = loyaltyRecordsPerLocationPerson.filter(row => {
+      return row.timestamp >= "1/06/2014"  && row.timestamp <= "1/12/2014 ";
+    });
+
+    var sumCreditCardWk1 = creditRecordsPerLocationPersonWk1.reduce((a, {price}) => a + parseFloat(price), 0);
+    var sumLoyaltyCardWk1 = loyaltyRecordsPerLocationPersonWk1.reduce((a, {price}) => a + parseFloat(price), 0);
+    var sumWk1 = sumCreditCardWk1 + sumLoyaltyCardWk1;
+    const sumListWk1 = [sumCreditCardWk1, sumLoyaltyCardWk1, sumWk1];
+
+
+    //WK2
+    const creditRecordsPerLocationPersonWk2 = creditRecordsPerLocationPerson.filter(row => {
+      return row.timestamp >= "1/13/2014"  && row.timestamp <= "1/19/2014 ";
+    });
+
+    const loyaltyRecordsPerLocationPersonWk2 = loyaltyRecordsPerLocationPerson.filter(row => {
+      return row.timestamp >= "1/13/2014"  && row.timestamp <= "1/19/2014 ";
+    });
+
+
+    var sumCreditCardWk2 = creditRecordsPerLocationPersonWk2.reduce((a, {price}) => a + parseFloat(price), 0);
+    var sumLoyaltyCardWk2 = loyaltyRecordsPerLocationPersonWk2.reduce((a, {price}) => a + parseFloat(price), 0);
+    var sumWk2 = sumCreditCardWk2 + sumLoyaltyCardWk2;
+    const sumListWk2 = [sumCreditCardWk2, sumLoyaltyCardWk2, sumWk2];
+
+
+    //WK3
+    const creditRecordsPerLocationPersonWk3 = creditRecordsPerLocationPerson.filter(row => {
+      return row.timestamp >= "1/20/2014"  && row.timestamp <= "1/26/2014 ";
+    });
+
+    const loyaltyRecordsPerLocationPersonWk3 = loyaltyRecordsPerLocationPerson.filter(row => {
+      return row.timestamp >= "1/20/2014"  && row.timestamp <= "1/26/2014 ";
+    });
+
+    var sumCreditCardWk3 = creditRecordsPerLocationPersonWk3.reduce((a, {price}) => a + parseFloat(price), 0);
+    var sumLoyaltyCardWk3 = loyaltyRecordsPerLocationPersonWk3.reduce((a, {price}) => a + parseFloat(price), 0);
+    var sumWk3 = sumCreditCardWk3 + sumLoyaltyCardWk3;
+    const sumListWk3 = [sumCreditCardWk3, sumLoyaltyCardWk3, sumWk3];
+
+
+    //console.log(personFiltered);
+    // var sumCreditCard = creditRecordsPerLocationPerson.reduce((a, {price}) => a + parseFloat(price), 0);
+    // var sumLoyaltyCard = loyaltyRecordsPerLocationPerson.reduce((a, {price}) => a + parseFloat(price), 0);
+    // const paymentList = [sumCreditCard, sumLoyaltyCard, sumCreditCard + sumLoyaltyCard];
+    res.set(location, {
+      'week1': sumListWk1,
+      'week2': sumListWk2,
+      'week3': sumListWk3,
+    });
+
+  });
+  //console.log(res);
+  return res;
+}
+
+
+
+// TODO get weekly sum
+// given state map of <location, [records]> loaded, query for specific person and compute sum
+// function getSumOfPerson (firstName, lastName, locationList){
+//   // console.log(name_ccMap)
+//
+//   const res = new Map();
+//   locationList.forEach(location => {
+//
+//     //console.log(location);
+//     const creditRecordsPerLocation = name_ccMap.has(location)? name_ccMap.get(location) : [];
+//     const loyaltyRecordsPerLocation = name_lcMap.has(location)? name_lcMap.get(location): [];
+//
+//     //console.log(loyaltyRecordsPerLocation);
+//     const creditRecordsPerLocationPerson = creditRecordsPerLocation.filter(row => {return row.FirstName === firstName && row.LastName === lastName});
+//     const loyaltyRecordsPerLocationPerson = loyaltyRecordsPerLocation.filter(row => {return row.FirstName === firstName && row.LastName === lastName});
+//
+//     //console.log(personFiltered);
+//     var sumCreditCard = creditRecordsPerLocationPerson.reduce((a, {price}) => a + parseFloat(price), 0);
+//     var sumLoyaltyCard = loyaltyRecordsPerLocationPerson.reduce((a, {price}) => a + parseFloat(price), 0);
+//     const paymentList = [sumCreditCard, sumLoyaltyCard, sumCreditCard + sumLoyaltyCard];
+//     res.set(location, paymentList);
+//     //console.log(paymentList);
+//
+//   });
+//   //console.log(res);
+//   return res;
+// }
+
+
+
+
+
+
+
+Promise.all([getCreditCardTransactions(), getLoyaltyCardTransactions(), getListOfPlaces(), getListOfPeople() ]).then( ([cc,lc,places,people]) => {
   // data loaded
   const mapPromise = new Promise((resolve, reject) => {
     // compute hashmaps <place name, [transaction records of the place]>
@@ -73,11 +237,171 @@ Promise.all([getCreditCardTransactions(), getLoyaltyCardTransactions(), getListO
   });
 
   mapPromise.then( maps => {
-    console.log(maps[0]);
+    //console.log(maps[0]);
     name_ccMap = maps[0];
     name_lcMap = maps[1];
-    drawList(places);
-  })
+    //drawList(places); //draws table
+
+    const personTransactionSum = new Map();
+    // const maxPrice = Math.max(d3.max(cc, function(d) { return d.price; }), d3.max(lc, function(d) { return d.price; })); // todo
+    // console.log(maxPrice);
+
+    createDropDown(people);
+    createDropDownTime();
+
+
+    people.forEach(person => {
+      // console.log(person);
+      const first = person.split(/\s+/)[0];
+      const last = person.split(/\s+/)[1];
+      const summation = getSumOfPerson(first, last, places);
+      personTransactionSum.set(person, summation);
+
+      // set to property
+      allPlaces = places;
+      allTransactionsOfEachPerson = personTransactionSum;
+    });
+
+    //default behavior
+    drawStatGraph(personTransactionSum, places, "Cornelia Lais", "week1");
+  });
+
+
+
+// create a dropdown to select person and set property
+function createDropDown(people) {
+  // console.log(data);
+  var dropDown = d3.select("#dropDown_trans")
+    .append("div")
+    .append("select");
+
+  dropDown.on("change", function(d) {
+    currentPerson = d3.select(this).property("value");
+    drawStatGraph(allTransactionsOfEachPerson, allPlaces, currentPerson);
+  });
+
+  dropDown.selectAll("option")
+    .data(people)
+    .enter()
+    .append("option")
+    .attr("value", function (d) {
+      // console.log(d);
+      return d;
+    })
+    .text(function (d) { return d; });
+}
+
+
+function createDropDownTime() {
+  const weeks = ["week1", "week2", "week3"];
+  const dropDown = d3.select("#dropDown_week")
+    .append("div")
+    .append("select");
+
+  dropDown.selectAll("option")
+    .data(weeks)
+    .enter()
+    .append("option")
+    .attr("value", function (d) {return d;})
+    .text(function (d) { return d; });
+
+  dropDown.on("change", function(d) {
+    const currentWeek = d3.select(this).property("value");
+    drawStatGraph(allTransactionsOfEachPerson, allPlaces, currentPerson, currentWeek);
+  });
+
+
+}
+
+
+
+
+function drawStatGraph(personTransactionSum, places, person, week){
+  // clean up dots
+  if(!allTransactionsOfEachPerson || !places || !person)  return;
+  d3.select("#allDots").remove();
+
+  // draw axis
+  var x = d3.scaleBand()
+    .range([0, width])
+    .padding(0.1)
+    .domain(places);
+  var y = d3.scaleLinear()
+    .range([height, 0])
+    .domain([0, 1000]); // max value of sum TODO calculate max of sum
+  /*
+  * rotate text on axis part ref
+  * https://stackoverflow.com/questions/11252753/rotate-x-axis-text-in-d3
+  *
+  * */
+  chart.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0, " + height + ")")
+    .call(d3.axisBottom(x))
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-65)");
+  chart.append("g")
+    .attr("class", "y axis")
+    .call(d3.axisLeft(y));
+
+
+  //draw graph
+  var data = [...personTransactionSum.get(person)];
+  console.log(week);
+  const allDots = chart.append("g").attr("id", "allDots");
+
+  allDots.selectAll(".creditDots")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("class", "creditDots")
+    .attr("cx", function(d) {
+      console.log(d[1][week]);
+      return x(d[0]);
+    })
+    .attr("cy", function(d) { return y(d[1][week][0]); })
+    .attr('r', 3)
+    .style("fill", COLOR.GREEN);
+
+
+  allDots.selectAll(".loyaltyDots")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("class", "loyaltyDots")
+    .attr("cx", function(d) {
+      // console.log(d);
+      return x(d[0]);
+    })
+    .attr("cy", function(d) { return y(d[1][week][1]); })
+    .attr('r', 3)
+    .style("fill", COLOR.BLUE);
+
+
+  allDots.selectAll(".sumDots")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("class", "sumDots")
+    .attr("cx", function(d) {
+      // console.log(d);
+      return x(d[0]);
+    })
+    .attr("cy", function(d) { return y(d[1][week][2]); })
+    .attr('r', 3)
+    .style("fill", COLOR.RED);
+
+}
+
+
+
+
+
+
+
 });
 
 
@@ -98,8 +422,6 @@ function createLocation_lcTransactionMap(lc) {
   return map;
 }
 
-
-
 function createLocation_ccTransactionMap(cc) {
   const map = new Map();
   cc.forEach(row => {
@@ -118,7 +440,7 @@ function createLocation_ccTransactionMap(cc) {
 
 
 function drawList(data) {
-  console.log(data);
+  //console.log(data);
   d3.select("#transactions").remove();
   placeSelector.append("h4").text("Places of Transaction");
 

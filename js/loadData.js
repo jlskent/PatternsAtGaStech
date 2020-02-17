@@ -79,13 +79,30 @@ function getListOfPlaces() {
 
 
 
+function getListOfPeople() {
+
+  return dataPromise.then(data => {
+    var listOfPeople = [];
+    data.loyaltyCardTransactionData.forEach(row => listOfPeople.push(row.FirstName + " " + row.LastName));
+    data.creaditCardTransactionData.forEach(row => listOfPeople.push(row.FirstName + " " + row.LastName));
+    listOfPeople = listOfPeople.filter((item, i, array) => array.indexOf(item) == i);
+    return listOfPeople;
+  }).catch(
+    e => console.log(" failed to load data")
+  );
+}
+
+
+
+
 const dataAgent = {
   getAllCarAssignments,
   getCarTrackingDataById,
   getAlibaData,
   getLoyaltyCardTransactions,
   getCreditCardTransactions,
-  getListOfPlaces
+  getListOfPlaces,
+  getListOfPeople,
 };
 
 export default dataAgent;
