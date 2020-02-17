@@ -12,7 +12,7 @@ var margin = {top: 10, right: 30, bottom: 30, left: 60},
   width = 1000 - margin.left - margin.right,
   height = 800 - margin.top - margin.bottom;
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#tracking").append("svg")
   // .attr("id", )
   .attr("preserveAspectRatio", "none")
   .attr("width", width + margin.left + margin.right)
@@ -28,33 +28,46 @@ getAlibaData().then(alibaJson => {
 
 });
 
-const carTrackingTab = document.querySelector(".tracking-tab");
-const transactionTab = document.querySelector(".transaction-tab");
 
-carTrackingTab.addEventListener('click', function (e) {
-  if(this.classList.contains('tab-selected')) return;
-
-  // show and hide corresponding items
-  hide('.transaction-item');
-  show('.tracking-item');
-
-  // modify tab style
-  this.classList.add("tab-selected");
-  transactionTab.classList.remove("tab-selected");
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+  var target = $(e.target).attr("href") // activated tab
+  if (target == 'Car-Tracking'){
+    hide('.transaction-item');
+    show('.tracking-item');
+  }
+  else if(target == 'Card-Transactions'){
+    hide('.tracking-item');
+    show('.transaction-item');
+  }
 });
 
-transactionTab.addEventListener('click', function (e) {
-  if(this.classList.contains('tab-selected')) return;
+// const carTrackingTab = document.querySelector(".tracking-tab");
+// const transactionTab = document.querySelector(".transaction-tab");
 
-  // show and hide corresponding items
-  hide('.tracking-item');
-  show('.transaction-item');
+// carTrackingTab.addEventListener('click', function (e) {
+//   if(this.classList.contains('tab-selected')) return;
 
-  // modify tab style
-  this.classList.add("tab-selected");
-  carTrackingTab.classList.remove("tab-selected");
+//   // show and hide corresponding items
+//   hide('.transaction-item');
+//   show('.tracking-item');
 
-});
+//   // modify tab style
+//   this.classList.add("tab-selected");
+//   transactionTab.classList.remove("tab-selected");
+// });
+
+// transactionTab.addEventListener('click', function (e) {
+//   if(this.classList.contains('tab-selected')) return;
+
+//   // show and hide corresponding items
+//   hide('.tracking-item');
+//   show('.transaction-item');
+
+//   // modify tab style
+//   this.classList.add("tab-selected");
+//   carTrackingTab.classList.remove("tab-selected");
+
+// });
 
 const {timeline, xScaleWeek1, xScaleWeek2, yScale} = drawTimelineAxis();
 

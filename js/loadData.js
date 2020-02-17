@@ -9,16 +9,16 @@ const dataPromise = new Promise((resolve, reject) => {
     .defer(d3.csv, "data/assignment2/loyalty_data.csv")
     .defer(d3.csv, "data/assignment2/cc_data.csv")
     .defer(d3.json, "data/assignment2/Geospatial/Aliba.geojson")
-    .defer(d3.json, "data/assignment2/Geospatial/Kronos_Island.geojson")
+  //  .defer(d3.json, "data/assignment2/Geospatial/Kronos_Island.geojson")
 
-    .await(function(error, data1, data2, data3, data4, data5, data6) {
+    .await(function(error, data1, data2, data3, data4, data5) {
       if (error) reject(error);
       const carAssignmentData = data1;
       const carTrackingData = processDate(filterNaN(data2));
       const loyaltyCardTransactionData = data3;
       const creaditCardTransactionData = data4;
       const alibaJson = data5;
-      const KronosJson = data6;
+      //const KronosJson = data6;
 
       const data = {
         carAssignmentData,
@@ -26,7 +26,7 @@ const dataPromise = new Promise((resolve, reject) => {
         loyaltyCardTransactionData,
         creaditCardTransactionData,
         alibaJson,
-        KronosJson
+       // KronosJson
       };
 
       resolve(data);

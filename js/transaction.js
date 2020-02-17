@@ -27,7 +27,7 @@ var margin = {top: 20, right: 20, bottom: 100, left: 40},
   height = 500 - margin.top - margin.bottom;
 
 
-var chart = transactionSelector.append("svg")
+var chart = d3.select("#records").append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -279,6 +279,7 @@ function createDropDown(people) {
 
   dropDown.on("change", function(d) {
     currentPerson = d3.select(this).property("value");
+    console.log(allTransactionsOfEachPerson);
     drawStatGraph(allTransactionsOfEachPerson, allPlaces, currentPerson);
   });
 
@@ -444,10 +445,10 @@ function createLocation_ccTransactionMap(cc) {
 function drawList(data) {
   console.log(data);
   d3.select("#transactions").remove();
-  parent.append("h4").text("Places of Transaction");
+  d3.select("#records").append("h4").text("Places of Transaction");
 
   var ul =
-    parent
+  d3.select("#records")
     .append("ul")
     .attr("id", "listOfPlaces")
     .attr("class", "list-group")
