@@ -47,6 +47,12 @@ function getCarTrackingDataById(id) {
   }).catch(e => "No data fetched.");
 }
 
+// get car data
+function getCarTrackingData() {
+  return dataPromise.then(data => data.carTrackingData).catch(e => "No data fetched.");
+}
+
+
 function getAlibaData() {
   return dataPromise.then(data => data.alibaJson).catch(e => "No data fetched.");
 }
@@ -98,6 +104,7 @@ function getListOfPeople() {
 const dataAgent = {
   getAllCarAssignments,
   getCarTrackingDataById,
+  getCarTrackingData,
   getAlibaData,
   getLoyaltyCardTransactions,
   getCreditCardTransactions,
