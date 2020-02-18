@@ -1,5 +1,6 @@
 import dataAgent from './loadData.js';
 import {svg, projection, timeline, xScaleWeek1, xScaleWeek2, yScale} from './main.js';
+import {remove} from './util.js';
 
 const {getAllCarAssignments, getCarTrackingDataById} = dataAgent;
 
@@ -40,13 +41,32 @@ function drawTrackingData(data) {
 
   const week1data = [];
   const week2data = [];
-  let count = 0;
+
 
   console.log("drawing gps data");
-  const allData = svg.append('g')
-    .attr("id", "gpsGraph")
+  for(let i = 0; i < data.length; i++) {
+    const date = data[i].Timestamp.getDate();
+    if(date >= 6 && date <= 12) {
+        week1data.push(data[i]); 
+    } else {
+        week2data.push(data[i]);
+    } 
+  }
+
+  let week1ColorScale = d3.scaleSequential(d3.interpolateInferno)
+                          .domain([0, week1data.length]);
+  let week2ColorScale = d3.scaleSequential(d3.interpolateCool)
+                          .domain([0, week2data.length]);
+
+
+  let i = 0;
+  const gpsGraph = svg.append('g')
+    .attr("id", "gpsGraph");
+
+  const week1Graph = gpsGraph.append('g')
+    .attr("id", "week1Graph")
     .selectAll("dot")
-    .data(data)
+    .data(week1data)
     .enter()
     .append("circle")
     .attr("cx", (d) => {
@@ -68,26 +88,44 @@ function drawTrackingData(data) {
     })
     .attr("r", 2)
     .attr("z-index", "9")
-    .style("fill", (d) => { 
-      count++;
-      const date = d.Timestamp.getDate();
-      if(date >= 6 && date <= 12) {
-        if(count === 10) {
-          week1data.push(d); 
-          count = 0;
-        }
-        return 'red';
-      } else {
-        if(count === 10) {
-          week2data.push(d);
-          count = 0;
-        }
-        return 'blue';
-      }
+    .style("fill", function (d) {
+      return week1ColorScale(i++);
     })
     .attr('fill-opacity', '0.25');
 
-    drawTimeline(week1data, week2data, allData);
+
+  i = 0;  
+  const week2Graph = gpsGraph.append('g')
+    .attr("id", "week2Graph")
+    .selectAll("dot")
+    .data(week2data)
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => {
+      // console.log("traking");
+      // console.log([d.long, d.lat]);
+
+      // console.log(projection([d.long, d.lat]));
+      // console.log(projection([36.076225, 24.87468932]));
+      
+
+      var coord = projection([d.long, d.lat]);
+      // if(new Date(d.Timestamp).ge)
+      // console.log(coord);
+      return coord[0];
+    })
+    .attr("cy", (d) =>{
+      var coord = projection([d.long, d.lat]);
+      return coord[1];
+    })
+    .attr("r", 2)
+    .attr("z-index", "9")
+    .style("fill", function (d) {
+      return week2ColorScale(i++);
+    })
+    .attr('fill-opacity', '0.25');
+
+    drawTimeline(week1data, week2data, week1Graph, week2Graph);
 };
 
 
@@ -116,7 +154,7 @@ let createDropDown = (carAssignments) => {
     .text(function (d) { return d.LastName + " " + d.FirstName; });
 };
 
-function drawTimeline(week1, week2, allData) {
+function drawTimeline(week1, week2, week1Graph, week2Graph) {
 
 
   timeline.append("g")
@@ -156,14 +194,88 @@ function drawTimeline(week1, week2, allData) {
           .call(brush);
 
   function brushended() {
+    remove('.label');
+    let selectedWeek1Length = 0, selectedWeek2Length = 0;
+
     const selection = d3.event.selection;
     if (!d3.event.sourceEvent || !selection) return;
     const [x1, x2] = d3.event.selection;
 
-    allData.classed("hidden", function (d) {
+    week1Graph.classed("hidden", function (d) {
       const week1X = xScaleWeek1(d.Timestamp);
+      if(!(week1X >= x1 && week1X <= x2)) {
+        return true;
+      } else {
+        selectedWeek1Length++;
+        return false;
+      }
+    });
+
+    week2Graph.classed("hidden", function (d) {
       const week2X = xScaleWeek2(d.Timestamp);
-      return !((week1X >= x1 && week1X <= x2) || (week2X >= x1 && week2X <= x2));
+      if(!(week2X >= x1 && week2X <= x2)) {
+        return true;
+      } else {
+        selectedWeek2Length++;
+        return false;
+      }
+    });
+
+    console.log(week1.length, selectedWeek1Length, week2.length, selectedWeek2Length);
+    let week1ColorScale = d3.scaleSequential(d3.interpolateInferno)
+                          .domain([0, selectedWeek1Length]);
+    let week2ColorScale = d3.scaleSequential(d3.interpolateCool)
+                            .domain([0, selectedWeek2Length]);
+    
+    let i = 0;
+    week1Graph.style('fill', d => {
+      const week1X = xScaleWeek1(d.Timestamp);
+      if(!(week1X >= x1 && week1X <= x2)) {
+        return 'red';
+      } else {
+        if(i === 0) {
+          var coord = projection([d.long, d.lat]);
+          svg.append('text')
+                    .attr('class', 'label week1-label')
+                    .text('1S')
+                    .attr('x', coord[0] + 15)
+                    .attr('y', coord[1])
+        } 
+        if(i === selectedWeek1Length - 1) {
+          var coord = projection([d.long, d.lat]);
+          svg.append('text')
+                    .attr('class', 'label week1-label')
+                    .text('1E')
+                    .attr('x', coord[0] - 25)
+                    .attr('y', coord[1])
+        }
+        return week1ColorScale(i++);
+      }
+    });
+    i = 0;
+    week2Graph.style('fill', d => {
+      const week2X = xScaleWeek2(d.Timestamp);
+      if(!(week2X >= x1 && week2X <= x2)) {
+        return 'red';
+      } else {
+        if(i === 0) {
+          var coord = projection([d.long, d.lat]);
+          svg.append('text')
+                    .attr('class', 'label week2-label')
+                    .text('2S')
+                    .attr('x', coord[0] - 8)
+                    .attr('y', coord[1] + 15)
+        } 
+        if(i === selectedWeek1Length - 1) {
+          var coord = projection([d.long, d.lat]);
+          svg.append('text')
+                    .attr('class', 'label week2-label')
+                    .text('2E')
+                    .attr('x', coord[0] - 8)
+                    .attr('y', coord[1] - 15)
+        }
+        return week2ColorScale(i++);
+      }
     });
   }
 }

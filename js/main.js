@@ -24,9 +24,10 @@ var storeLocationSelector = svg.append("g");
 getAlibaData().then(alibaJson => {
   projection.fitSize([width, height], alibaJson);
   loadImage();
-  //drawBaseMap(alibaJson.features);
 
 });
+
+
 
 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -39,6 +40,27 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     hide('.tracking-item');
     show('.transaction-item');
   }
+});
+
+document.querySelector("#week1Only").addEventListener('click', function (e) {
+  show('#week1Graph');
+  hide('#week2Graph');
+  show('.week1-label');
+  hide('.week2-label');
+});
+
+document.querySelector("#week2Only").addEventListener('click', function (e) {
+  show('#week2Graph');
+  hide('#week1Graph');
+  show('.week2-label');
+  hide('.week1-label');
+});
+
+document.querySelector("#both").addEventListener('click', function (e) {
+  show('#week2Graph');
+  show('#week1Graph');
+  show('.week1-label');
+  show('.week2-label');
 });
 
 // const carTrackingTab = document.querySelector(".tracking-tab");

@@ -25,3 +25,9 @@ export function show(selector) {
 		node.classList.remove("hidden");
 	});
 }
+
+export function remove(selector) {
+	document.querySelectorAll(selector).forEach(node => {
+		node.remove();
+	});
+}
