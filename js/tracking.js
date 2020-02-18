@@ -266,7 +266,7 @@ function drawTimeline(week1, week2, week1Graph, week2Graph) {
                     .attr('x', coord[0] - 8)
                     .attr('y', coord[1] + 15)
         } 
-        if(i === selectedWeek1Length - 1) {
+        if(i === selectedWeek2Length - 1) {
           var coord = projection([d.long, d.lat]);
           svg.append('text')
                     .attr('class', 'label week2-label')
