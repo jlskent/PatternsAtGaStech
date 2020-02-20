@@ -58,63 +58,23 @@ li:hover{
 	text-emphasis: white;
 	background-color: darkslateblue; !important;
 
-} 
+}
 
 
 
-/*transaction*/
-
-/*ul {*/
-	/*position: absolute;*/
-	/*top: 20px;*/
-	/*bottom: 20px;*/
-	/*left: 20px;*/
-	/*right: 20px;*/
-	/*overflow: scroll;*/
-	/*margin: 0;*/
-	/*padding: 0;*/
-
-	/*border: 2px solid #ccc;*/
-
-	/*font-size: 16px;*/
-	/*font-family: Arial, sans-serif;*/
-	/*-webkit-overflow-scrolling: touch;*/
-
-/*}*/
-
-/*li {*/
-	/*padding: 10px 20px;*/
-
-	/*border-bottom: 1px solid #ccc;*/
-
-/*&:last-child {*/
-	 /*border-bottom: none;*/
- /*}*/
-
-/*&:nth-child(even) {*/
-	 /*background: #f8f8f8;*/
- /*}*/
-/*}*/
-
-/*#places .ul{*/
-
-/*}*/
-
-
-/*.ul {*/
-
-/*}*/
-
-/*#places .list-group{*/
-
-/*}*/
-
-/*.list-group{*/
-	/*max-height: 300px;*/
-	/*margin-bottom: 10px;*/
-	/*overflow:scroll;*/
-	/*-webkit-overflow-scrolling: touch;*/
-/*}*/
+a.nav-link {
+	color: white;
+	text-decoration:none;
+}
 
 
 
+a.nav-link:hover {
+	color: white;
+	text-decoration:none;
+}
+
+
+.jumbotron {
+	padding-bottom: -100px !important;
+}

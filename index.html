@@ -11,6 +11,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
+        <script src="d3.legend.js"></script>
 
 
     </head>
@@ -62,22 +63,29 @@
         </div>
         <div role="tabpanel" class="tab-pane fade" id="Card-Transactions">
             <div class="transaction-item">
-
-            <div id="dropDown_trans"></div>
-            <div id="dropDown_week"></div>
-
-            <input id="showCreditCardBtn" type="button" value="show credit card" onclick="" />
-            <input id="showLoyaltyCardBtn" type="button" value="show loyalty card" onclick="" />
-            <input id="sort" type="button" value="sort Records" onclick="" />
+                <div class="row">
+                    <div class="col-4"><p>Select User</p></div>
+                    <div class="col-8"><div id="dropDown_trans"></div></div>
+                </div>
+                <div class="row">
+                    <div class="col-4"><p>Select Week</p></div>
+                    <div class="col-8"><div id="dropDown_week"></div></div>
+                </div>
+            <!--<input id="showCreditCardBtn" type="button" value="show credit card" onclick="" />-->
+            <!--<input id="showLoyaltyCardBtn" type="button" value="show loyalty card" onclick="" />-->
+            <!--<input id="sort" type="button" value="sort Records" onclick="" />-->
 
 
             <div class="row">
-                <div class="col-sm-8" id="records"></div>
-                <div class="col-sm-2" id="cc"></div>
-                <div class="col-sm-2" id ="lc"></div>
+                <div class="col-8" id="records"></div>
+
 
             </div>
-            <div id="transactions"></div>
+            <div class="row">
+                <div class="col-4" id="transactions" ></div>
+                <div class="col-2" id="cc"></div>
+                <div class="col-2" id ="lc"></div>
+            </div>
 
         </div>
         </div>

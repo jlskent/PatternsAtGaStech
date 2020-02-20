@@ -7,7 +7,7 @@ const { getCreditCardTransactions, getLoyaltyCardTransactions, getListOfPlaces, 
 //selector
 var parent = d3.select(".transaction-item");
 var transactionSelector = parent.append("div");
-var placeSelector = d3.select("#name").append("div").attr("id", "places");
+var chartSelector = d3.select("#name").append("div").attr("id", "places");
 //cc
 var recordsSelector = d3.select("#cc").append("div").attr("id", "records");
 //lc
@@ -55,8 +55,8 @@ var name_lcMap = new Map();
 var showCreditCardRecords = true;
 var showLoyaltyCardRecords = false;
 
-var currentPerson = "";
-var currentWeek = "";
+var currentPerson = "Cornelia Lais";
+var currentWeek = "week1";
 var allTransactionsOfEachPerson = new Map();
 var allPlaces = [];
 
@@ -76,25 +76,6 @@ d3.select('#sort')
 
 
 
-d3.select('#showCreditCardBtn')
-  .on('click', function() {
-    //console.log("show showCreditCardBtn");
-    showCreditCardRecords = true;
-    showLoyaltyCardRecords = false;
-    const opacity = showCreditCardRecords? 1:0;
-    recordsSelector.style("opacity", opacity);
-
-  });
-
-
-d3.select('#showLoyaltyCardBtn')
-  .on('click', function() {
-    //console.log("show showLoyaltyCardBtn");
-    showCreditCardRecords = false;
-    showLoyaltyCardRecords = true;
-    const opacity = showLoyaltyCardRecords? 1:0;
-    recordsSelector.style("opacity", opacity);
-  });
 
 
 
@@ -275,12 +256,13 @@ function createDropDown(people) {
   // console.log(data);
   var dropDown = d3.select("#dropDown_trans")
     .append("div")
-    .append("select");
+    .append("select")
+    .attr("class", "form-control");
 
   dropDown.on("change", function(d) {
     currentPerson = d3.select(this).property("value");
     console.log(allTransactionsOfEachPerson);
-    drawStatGraph(allTransactionsOfEachPerson, allPlaces, currentPerson);
+    drawStatGraph(allTransactionsOfEachPerson, allPlaces, currentPerson, currentWeek);
   });
 
   dropDown.selectAll("option")
@@ -299,7 +281,9 @@ function createDropDownTime() {
   const weeks = ["week1", "week2", "week3"];
   const dropDown = d3.select("#dropDown_week")
     .append("div")
-    .append("select");
+    .append("select")
+    .attr("class", "form-control");
+
 
   dropDown.selectAll("option")
     .data(weeks)
@@ -309,7 +293,8 @@ function createDropDownTime() {
     .text(function (d) { return d; });
 
   dropDown.on("change", function(d) {
-    const currentWeek = d3.select(this).property("value");
+    const week = d3.select(this).property("value");
+    currentWeek = week;
     drawStatGraph(allTransactionsOfEachPerson, allPlaces, currentPerson, currentWeek);
   });
 
@@ -331,7 +316,7 @@ function drawStatGraph(personTransactionSum, places, person, week){
     .domain(places);
   var y = d3.scaleLinear()
     .range([height, 0])
-    .domain([0, 1000]); // max value of sum TODO calculate max of sum
+    .domain([0, 500]); // max value of sum TODO calculate max of sum
   /*
   * rotate text on axis part ref
   * https://stackoverflow.com/questions/11252753/rotate-x-axis-text-in-d3
@@ -396,6 +381,43 @@ function drawStatGraph(personTransactionSum, places, person, week){
     .attr("cy", function(d) { return y(d[1][week][2]); })
     .attr('r', 3)
     .style("fill", COLOR.RED);
+
+
+  // var legend = chart.append("g")
+  //   .attr("class", "legend")
+  //   .attr("x", width - 30)
+  //   .attr("y", 30)
+  //   .attr("height", 150)
+  //   .attr("width", 100);
+
+  var legend = chart
+    .append("g")
+    .selectAll('g').data(
+    [ ['Credit card', COLOR.GREEN],
+      ['Loyalty card', COLOR.BLUE],
+      ['Total', COLOR.RED]]
+    )
+    .enter()
+    .append('g')
+    .each(function(d, i) {
+      console.log(d);
+      console.log(i);
+      var g = d3.select(this);
+      g.append("circle")
+        .attr("cx", width - 120)
+        .attr("cy", i*30)
+        .attr("r", 5)
+        .style("fill", d[1]);
+
+      g.append("text")
+        .attr("x", width - 100)
+        .attr("y", i*30 + 5)
+        .attr("height",20)
+        .attr("width",150)
+        // .style("fill", d)
+        .text(d[0]);
+
+    });
 
 }
 

@@ -134,7 +134,8 @@ let createDropDown = (carAssignments) => {
   // console.log(data);
   var dropDown = d3.select("#dropDown")
     .append("div")
-    .append("select");
+    .append("select")
+    .attr("class", "form-control");
 
   dropDown.on("change", function(d) {
     var value = d3.select(this).property("value");
