@@ -314,7 +314,7 @@ function drawStatGraph(personTransactionSum, places, person, week){
   if(!allTransactionsOfEachPerson || !places || !person)  return;
   d3.select("#allDots").remove();
 
-  console.log(personTransactionSum);
+  // console.log(personTransactionSum);
   // draw axis
   var x = d3.scaleBand()
     .range([0, width])
@@ -344,7 +344,7 @@ function drawStatGraph(personTransactionSum, places, person, week){
 
   //draw graph
   var data = [...personTransactionSum.get(person)];
-  console.log(week);
+  // console.log(week);
   const allDots = chart.append("g").attr("id", "allDots");
 
   allDots.selectAll(".creditDots")
