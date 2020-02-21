@@ -5,10 +5,11 @@ var parent = d3.select("#resultab");
 
 
 //records from 1 to 4 AM
-getCreditCardTransactions().then(data =>{
+const p1 = getCreditCardTransactions().then(data =>{
     var result = data.filter(d => {
         return  5>ts(d.timestamp).getHours()>0});
-    var TimeTable = parent.append("div").attr('id', 'TimeTable').attr('class', 'col-xl-4 col-6');
+    var TimeTable = parent.append("div").attr('id', 'TimeTable').attr('class', 'col-xl-4 col-6 col-sm-12')
+                            .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "People go out in the midnight is weird");
     TimeTable.append("h4")
             .text("Unusual activity between 1AM to 4AM");
     TimeTable.append("ul")
@@ -29,7 +30,7 @@ getCreditCardTransactions().then(data =>{
 });
 
 
-getCarTrackingData().then(data =>{
+const p2 = getCarTrackingData().then(data =>{
     var result = data.filter(d => {
         return  5>ts(d.Timestamp).getHours()>0});
     var result1 = result.reduce((acc, it) => {
@@ -48,7 +49,8 @@ getCarTrackingData().then(data =>{
         return b.count - a.count;
       });
 
-    var CarTimeTable = parent.append("div").attr('id', 'CarTimeTable').attr('class', 'col-xl-4 col-6');
+    var CarTimeTable = parent.append("div").attr('id', 'CarTimeTable').attr('class', 'col-xl-4 col-6 col-sm-12')
+                                .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "count gps record showing in the midnight");
     CarTimeTable.append("h4").text("Unusual car activity between 1AM to 4AM");
     CarTimeTable.append("ul")
     .attr("class", "list-group")
@@ -68,13 +70,14 @@ function ts(x){
 }
 
 //top 10 highest transaction
-getCreditCardTransactions().then(data =>{
+const p3 = getCreditCardTransactions().then(data =>{
     data.sort(function (a, b) {
         return b.price - a.price;
       });
     var result = data.slice(0, 5)
 
-    var ccHigh = parent.append("div").attr('id', 'ccHigh').attr('class', 'col-xl-4 col-6');
+    var ccHigh = parent.append("div").attr('id', 'ccHigh').attr('class', 'col-xl-4 col-6 col-sm-12')
+                        .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "check large amount of transaction");
     ccHigh.append("h4").text("Highest cc prices");
     ccHigh.append("ul")
     .attr("class", "list-group")
@@ -89,13 +92,14 @@ getCreditCardTransactions().then(data =>{
     .attr("class", "list-group-item")
 });
 
-getLoyaltyCardTransactions().then(data =>{
+const p4 = getLoyaltyCardTransactions().then(data =>{
     data.sort(function (a, b) {
         return b.price - a.price;
       });
     var result = data.slice(0, 5)
 
-    var lcHigh = parent.append("div").attr('id', 'lcHigh').attr('class', 'col-xl-4 col-6');
+    var lcHigh = parent.append("div").attr('id', 'lcHigh').attr('class', 'col-xl-4 col-6 col-sm-12')
+                            .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "check large amount of transaction");
     lcHigh.append("h4").text("Highest lc prices");
     lcHigh.append("ul")
     .attr("class", "list-group")
@@ -112,7 +116,7 @@ getLoyaltyCardTransactions().then(data =>{
 
 
 //top 5 least visited place
-getCreditCardTransactions().then(data =>{
+const p5 = getCreditCardTransactions().then(data =>{
     var result = data.reduce((acc, it) => {
         acc[it.location] = acc[it.location] + 1 || 1;
         return acc;
@@ -128,7 +132,8 @@ getCreditCardTransactions().then(data =>{
     });
     var result2 = sortable.slice(0, 5)
 
-    var ccLeast = parent.append("div").attr('id', 'ccLeast').attr('class', 'col-xl-4 col-6');
+    var ccLeast = parent.append("div").attr('id', 'ccLeast').attr('class', 'col-xl-4 col-6 col-sm-12')
+                            .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "check small amount of transaction");
     ccLeast.append("h4").text("Least cc records location");
     ccLeast.append("ul")
     .attr("class", "list-group")
@@ -148,7 +153,7 @@ getCreditCardTransactions().then(data =>{
 
 //top 10 most visited place == patterns
 
-getCreditCardTransactions().then(data =>{
+const p6 = getCreditCardTransactions().then(data =>{
     var result = data.reduce((acc, it) => {
         acc[it.location] = acc[it.location] + 1 || 1;
         return acc;
@@ -164,7 +169,8 @@ getCreditCardTransactions().then(data =>{
     });
     var result2 = sortable.slice(0, 10)
 
-    var ccMost = parent.append("div").attr('id', 'ccMost').attr('class', 'col-xl-4 col-6');
+    var ccMost = parent.append("div").attr('id', 'ccMost').attr('class', 'col-xl-4 col-6 col-sm-12')
+                        .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "check where people do most transactions");
     ccMost.append("h4").text("Most cc records location");
     ccMost.append("ul")
     .attr("class", "list-group")
@@ -180,3 +186,8 @@ getCreditCardTransactions().then(data =>{
 
     //console.log(sortable)
 });
+
+Promise.all([p1, p2, p3, p4, p5, p6]).then(function () {
+    // document.querySelectorAll('[data-toggle="tooltip"]').forEach(el => );
+    $('[data-toggle="tooltip"]').tooltip()
+})

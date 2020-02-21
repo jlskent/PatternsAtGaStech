@@ -53,7 +53,7 @@ select {
 }
 
 
-li:hover{
+.list-group li:hover{
 	color: white !important;
 	text-emphasis: white;
 	background-color: darkslateblue; !important;
@@ -103,6 +103,9 @@ a.nav-link:hover {
 .tracking-panel {
 	width: 100%;
 	margin-top: 55px;
+	border: 1px solid #cccccc;
+	border-radius: 5px;
+	padding: 10px 5px;
 }
 
 .tracking-panel .btn-info {
@@ -113,4 +116,24 @@ a.nav-link:hover {
 	margin: 20px 0;
 }
 
+#listOfPlaces li {
+	cursor: pointer;
+}
+
+#recordDetail {
+	margin-top: 50px;
+}
+
+.transaction-item h4 {
+	padding: 8px;
+	color: white;
+	height: 40px;
+	line-height: 40px;
+	display: block;
+	background-color: #343A40;
+	box-sizing: content-box;
+	margin: 20px 0;
+	font-size: 20px;
+	border-radius: 5px;
+}
 

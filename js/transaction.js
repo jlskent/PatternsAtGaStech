@@ -8,10 +8,7 @@ const { getCreditCardTransactions, getLoyaltyCardTransactions, getListOfPlaces, 
 var parent = d3.select(".transaction-item");
 var transactionSelector = parent.append("div");
 var chartSelector = d3.select("#name").append("div").attr("id", "places");
-//cc
-var recordsSelector = d3.select("#cc").append("div").attr("id", "records");
-//lc
-var recordsSelector2 = d3.select("#lc").append("div").attr("id", "records2");
+
 
 
 
@@ -33,6 +30,14 @@ var chart = d3.select("#records").append("svg")
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+const row = d3.select("#records").append('div').attr('class', 'row').attr('id', 'recordDetail');
+row.append('div').attr('id', 'cc').attr('class', 'col-6');
+row.append('div').attr('id', 'lc').attr('class', 'col-6');
+
+//cc
+var recordsSelector = d3.select("#cc").append("div").attr("id", "records1");
+//lc
+var recordsSelector2 = d3.select("#lc").append("div").attr("id", "records2");
 
 const COLOR = {
   BLUE: "blue",
@@ -467,10 +472,10 @@ function createLocation_ccTransactionMap(cc) {
 function drawList(data) {
   console.log(data);
   d3.select("#transactions").remove();
-  d3.select("#records").append("h4").text("Places of Transaction");
+  d3.select("#recordsList").append("h4").text("Places of Transaction");
 
   var ul =
-  d3.select("#records")
+  d3.select("#recordsList")
     .append("ul")
     .attr("id", "listOfPlaces")
     .attr("class", "list-group")
