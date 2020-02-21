@@ -6,6 +6,10 @@ body {
 	display: none;
 }
 
+h4 {
+	text-transform: capitalize;
+}
+
 select {
     display: block;
 }
