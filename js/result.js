@@ -83,7 +83,7 @@ const p3 = getCreditCardTransactions().then(data =>{
 
     var ccHigh = parent.append("div").attr('id', 'ccHigh').attr('class', 'col-xl-4 col-sm-6 col-12')
                         .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "check large amount of transaction");
-    ccHigh.append("h4").text("Highest cc prices");
+    ccHigh.append("h4").text("Highest credit card transactions");
 
     const table = ccHigh.append("table")
     .attr("class", "table table-hover");
@@ -110,7 +110,7 @@ const p4 = getLoyaltyCardTransactions().then(data =>{
 
     var lcHigh = parent.append("div").attr('id', 'lcHigh').attr('class', 'col-xl-4 col-sm-6 col-12')
                             .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "check large amount of transaction");
-    lcHigh.append("h4").text("Highest lc prices");
+    lcHigh.append("h4").text("Highest loyalty card transactions");
     
     
 
@@ -151,7 +151,7 @@ const p5 = getCreditCardTransactions().then(data =>{
 
     var ccLeast = parent.append("div").attr('id', 'ccLeast').attr('class', 'col-xl-4 col-sm-6 col-12')
                             .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "check small amount of transaction");
-    ccLeast.append("h4").text("Least cc records location");
+    ccLeast.append("h4").text("Least credit card records location");
     
 
     const table = ccLeast.append("table")
@@ -192,7 +192,7 @@ const p6 = getCreditCardTransactions().then(data =>{
 
     var ccMost = parent.append("div").attr('id', 'ccMost').attr('class', 'col-xl-4 col-sm-6 col-12')
                         .attr('data-toggle', 'tooltip').attr('data-placement', "top").attr("title", "check where people do most transactions");
-    ccMost.append("h4").text("Most cc records location");
+    ccMost.append("h4").text("Most credit card records location");
     
     const table = ccMost.append("table")
     .attr("class", "table table-hover");
