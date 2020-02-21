@@ -8,8 +8,9 @@ var parent = d3.select("#resultab");
 getCreditCardTransactions().then(data =>{
     var result = data.filter(d => {
         return  5>ts(d.timestamp).getHours()>0});
-    var TimeTable = parent.append("div").attr('id', 'TimeTable')
-    TimeTable.append("h4").text("Unusual activity between 1AM to 4AM");
+    var TimeTable = parent.append("div").attr('id', 'TimeTable').attr('class', 'col-xl-4 col-6');
+    TimeTable.append("h4")
+            .text("Unusual activity between 1AM to 4AM");
     TimeTable.append("ul")
     .attr("class", "list-group")
     .selectAll("li")
@@ -47,7 +48,7 @@ getCarTrackingData().then(data =>{
         return b.count - a.count;
       });
 
-    var CarTimeTable = parent.append("div").attr('id', 'CarTimeTable')
+    var CarTimeTable = parent.append("div").attr('id', 'CarTimeTable').attr('class', 'col-xl-4 col-6');
     CarTimeTable.append("h4").text("Unusual car activity between 1AM to 4AM");
     CarTimeTable.append("ul")
     .attr("class", "list-group")
@@ -73,7 +74,7 @@ getCreditCardTransactions().then(data =>{
       });
     var result = data.slice(0, 5)
 
-    var ccHigh = parent.append("div").attr('id', 'ccHigh')
+    var ccHigh = parent.append("div").attr('id', 'ccHigh').attr('class', 'col-xl-4 col-6');
     ccHigh.append("h4").text("Highest cc prices");
     ccHigh.append("ul")
     .attr("class", "list-group")
@@ -94,7 +95,7 @@ getLoyaltyCardTransactions().then(data =>{
       });
     var result = data.slice(0, 5)
 
-    var lcHigh = parent.append("div").attr('id', 'lcHigh')
+    var lcHigh = parent.append("div").attr('id', 'lcHigh').attr('class', 'col-xl-4 col-6');
     lcHigh.append("h4").text("Highest lc prices");
     lcHigh.append("ul")
     .attr("class", "list-group")
@@ -127,7 +128,7 @@ getCreditCardTransactions().then(data =>{
     });
     var result2 = sortable.slice(0, 5)
 
-    var ccLeast = parent.append("div").attr('id', 'ccLeast')
+    var ccLeast = parent.append("div").attr('id', 'ccLeast').attr('class', 'col-xl-4 col-6');
     ccLeast.append("h4").text("Least cc records location");
     ccLeast.append("ul")
     .attr("class", "list-group")
@@ -163,7 +164,7 @@ getCreditCardTransactions().then(data =>{
     });
     var result2 = sortable.slice(0, 10)
 
-    var ccMost = parent.append("div").attr('id', 'ccMost')
+    var ccMost = parent.append("div").attr('id', 'ccMost').attr('class', 'col-xl-4 col-6');
     ccMost.append("h4").text("Most cc records location");
     ccMost.append("ul")
     .attr("class", "list-group")

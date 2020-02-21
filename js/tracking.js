@@ -145,6 +145,7 @@ let createDropDown = (carAssignments) => {
     });
   });
 
+  let i = 1;
   dropDown.selectAll("option")
     .data(carAssignments)
     .enter()
@@ -152,7 +153,7 @@ let createDropDown = (carAssignments) => {
     .attr("value", function (d) {
       return d.CarID;
     })
-    .text(function (d) { return d.LastName + " " + d.FirstName; });
+    .text(function (d) { return (i++) + ". " + d.LastName + " " + d.FirstName; });
 };
 
 function drawTimeline(week1, week2, week1Graph, week2Graph) {

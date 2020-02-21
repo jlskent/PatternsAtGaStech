@@ -16,7 +16,8 @@ var svg = d3.select("#tracking").append("svg")
   // .attr("id", )
   .attr("preserveAspectRatio", "none")
   .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom + 200);
+  .attr("height", height + margin.top + margin.bottom + 200)
+  .attr('viewbox', "0 0 1000 1000");
 
 
 var storeLocationSelector = svg.append("g");
