@@ -406,8 +406,8 @@ function drawStatGraph(personTransactionSum, places, person, week){
     .enter()
     .append('g')
     .each(function(d, i) {
-      console.log(d);
-      console.log(i);
+      // console.log(d);
+      // console.log(i);
       var g = d3.select(this);
       g.append("circle")
         .attr("cx", width - 120)
@@ -471,7 +471,7 @@ function createLocation_ccTransactionMap(cc) {
 
 
 function drawList(data) {
-  console.log(data);
+  // console.log(data);
   d3.select("#transactions").remove();
   d3.select("#recordsList").append("h4").text("Places of Transaction");
 
