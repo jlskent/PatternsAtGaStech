@@ -314,6 +314,7 @@ function drawStatGraph(personTransactionSum, places, person, week){
   if(!allTransactionsOfEachPerson || !places || !person)  return;
   d3.select("#allDots").remove();
 
+  console.log(personTransactionSum);
   // draw axis
   var x = d3.scaleBand()
     .range([0, width])
@@ -489,8 +490,8 @@ function drawList(data) {
     .attr("class", "list-group-item")
     .on('click', (nameOfPlace, i) => {
       currentNameOfPlace = nameOfPlace;
-      showRecords(nameOfPlace, name_ccMap.get(nameOfPlace), recordsSelector);
-      showRecords(nameOfPlace, name_lcMap.get(nameOfPlace) ,recordsSelector2);
+      showRecords(nameOfPlace, name_ccMap.get(nameOfPlace), recordsSelector, "Credit card");
+      showRecords(nameOfPlace, name_lcMap.get(nameOfPlace) ,recordsSelector2, "Loyalty Card");
       showOnMap(nameOfPlace); // not yet implemented
       //console.log(nameOfPlace);
     })
@@ -505,11 +506,11 @@ function drawList(data) {
 
 
 
-function showRecords(placeName, records, selector) {
+function showRecords(placeName, records, selector, cardType) {
   // clean up old
 
   selector.selectAll("*").remove();
-  selector.append("h4").text("Transaction record");
+  selector.append("h4").text("Transaction record (" + cardType + ")");
   selector
     .append("ul")
     .attr("class", "list-group")
@@ -518,8 +519,9 @@ function showRecords(placeName, records, selector) {
     .enter()
     .append("li")
     .text((d, i) => {
+      // console.log(d);
       const fullName = d.FirstName + " " + d.LastName;
-      return fullName + ", " + d.timestamp;
+      return fullName + ", " + d.timestamp + "   price: " + d.price;
     })
     .attr("class", "list-group-item")
 }
